@@ -1,6 +1,8 @@
-FROM centos:7
-RUN rpm -i https://mirrors.tuna.tsinghua.edu.cn/epel/epel-release-latest-7.noarch.rpm \
-    && rpm -i https://mirrors.tuna.tsinghua.edu.cn/remi/enterprise/remi-release-7.rpm \
+FROM panwenbin/centos7-remi:cn
+RUN sed -i 's/enabled=0/enabled=1/' /etc/yum.repos.d/remi-php70.repo \
+    && sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf \
+    && yum install -y curl php-cli php-fpm php-pdo php-mysqlnd php-intl php-json php-xml php-mbstring php-pecl-gmagick git \
     && yum clean all \
-    && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-*
-
+    && curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer \
+    && composer global require "fxp/composer-asset-plugin:^1.2.0" --prefer-dist
