@@ -1,6 +1,5 @@
-FROM centos:7
-RUN rpm -i https://mirrors.tuna.tsinghua.edu.cn/epel/epel-release-latest-7.noarch.rpm \
-    && rpm -i https://mirrors.tuna.tsinghua.edu.cn/remi/enterprise/remi-release-7.rpm \
-    && yum clean all \
-    && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-*
-
+FROM panwenbin/centos7-remi:cn
+RUN sed -i 's/enabled=0/enabled=1/' /etc/yum.repos.d/remi.repo \
+	&& sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf \
+    && yum install -y curl php-cli php-fpm php-pdo php-mysqlnd php-intl php-json php-xml php-mbstring php-bcmath php-pecl-gmagick php-gd php-pecl-zip php-pecl-redis php-pecl-yaf git \
+    && yum clean all
